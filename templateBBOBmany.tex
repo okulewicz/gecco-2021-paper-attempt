@@ -10,6 +10,8 @@
 \usepackage{float}
 \usepackage{ifthen}
 
+\usepackage{algorithm}% <=================http://ctan.org/pkg/algorithms
+\usepackage{algpseudocode}% <========== http://ctan.org/pkg/algorithmicx
 
 % define some COCO/dvipsnames colors because
 % ACM style does not allow to use them directly
@@ -49,9 +51,9 @@
 \acmISBN{123-4567-24-567/18/07}
 
 %Conference
-\acmConference[GECCO '19]{the Genetic and Evolutionary Computation Conference 2019}{July 13--17, 2019}{Prague, Czech Republic}
-\acmYear{2019}
-\copyrightyear{2019}
+\acmConference[GECCO '21]{the Genetic and Evolutionary Computation Conference 2021}{July 10--14, 2019}{Lille, France}
+\acmYear{2021}
+\copyrightyear{2021}
 
 \acmPrice{15.00}
 
@@ -93,36 +95,37 @@
 
 \begin{document}
 
-\title{Black-Box Optimization Benchmarking Template for the Comparison of More than Two Algorithms on the Noiseless Testbed}
-\renewcommand{\shorttitle}{Black-Box Optimization Benchmarking Template for More Than Two Algorithms}
-\titlenote{Submission deadline: April 3rd.}
-%Camera-ready paper due April 24th.}}
+\title{Benchmarking SHADE algorithm enhanced with model based optimization on the BBOB noiseless testbed}
+\renewcommand{\shorttitle}{SHADE algorithm enhanced with model based optimization on BBOB}
+\titlenote{Submission deadline: April 12th.}
 \subtitle{Draft version}
 
 
 
-\author{Firstname Lastname}
+\author{Michał Okulewicz}
 %\authornote{tba if needed}
 %\orcid{1234-5678-9012}
-%\affiliation{%
-%  \institution{Institute for Clarity in Documentation}
+\affiliation{%
+  \institution{Faculty of Mathematics and Information Science\\
+  Warsaw University of Technology, Poland}
 %  \streetaddress{P.O. Box 1212}
 %  \city{Dublin} 
 %  \state{Ohio} 
 %  \postcode{43017-6221}
-%}
-%\email{trovato@corporation.com}
+}
+\email{M.Okulewicz@mini.pw.edu.pl}
 %
-%\author{G.K.M. Tobin}
+\author{Mateusz Zaborski}
 %\authornote{The secretary disavows any knowledge of this author's actions.}
-%\affiliation{%
-%  \institution{Institute for Clarity in Documentation}
+\affiliation{%
+  \institution{Faculty of Mathematics and Information Science\\
+  Warsaw University of Technology, Poland}
 %  \streetaddress{P.O. Box 1212}
 %  \city{Dublin} 
 %  \state{Ohio} 
 %  \postcode{43017-6221}
-%}
-%\email{webmaster@marysville-ohio.com}
+}
+\email{M.Zaborski@mini.pw.edu.pl}
 %
 %\author{Lars Th{\o}rv{\"a}ld}
 %\authornote{This author is the
@@ -170,7 +173,13 @@
 
 
 \begin{abstract}
-to be written
+ In this paper we evaluate the SHADE-LM algorithm on the BBOB noiseless testbed.
+ The algorithm hybridizes the SHADE algorithm with a model based optimization.
+ This hybridization is performed in a transparent manner for both optimizers,
+ with SHADE having access to the samples improved by model based optimization,
+ and models of square function are fitted on the current population.
+ The paper compares this extended version with the performance of original
+ R-SHADE and KL-BIPOP-CMAES.
 \end{abstract}
 
 
@@ -201,21 +210,92 @@ to be written
 \maketitle
 
 
-% \section{Introduction}
+\section{Introduction}
+
+R-SHADE \cite{Tanabe2014} algorithm has been proposed as one of the more successful
+modification of Differential Evolution, following the path of adapting the scale
+and cross-over probability factors, employing the archive of previous best samples,
+utilizing the current-to-best position update and restart mechanism based on population
+locations or values spread.
+
+Hybridizing plain Particle Swarm Optimization (PSO) and Differential Evolution (DE)
+algorithms with model based optimizer has already been proved
+to improve their performance \cite{zaborski2019generalized,zaborski2020analysis,Okulewicz2020}.
+
+In this paper we utilize our Generalized Adaptive Particle Swarm Optimization (GAPSO) framework
+\cite{ulinski2018generalized,Okulewicz2020}
+and implement within it a version of SHADE \cite{Tanabe2014} and model based optimizer \cite{zaborski2020analysis}.
 %
-% \section{Algorithm Presentation}
+\section{GAPSO Framework Concept}
+The concept of GAPSO framework is to allow for hybridization of optimization algorithms,
+in a way which will be transparent to the hybridized methods.
+This approach comes from the observation that methods such as PSO or DE,
+need only a minimal amount of information (i.e. locations and values
+of the previously sampled locations). Please note that PSO's velocity
+is simply a difference between previous and current location.
+Therefore an algorithm which stores current, previous and best location
+for each individual (particle) allows to employ sampling of both DE and PSO
+based algorithms, in a transparent manner from the point of view of individual.
+
+\section{SHADE-LM Algorithm Presentation}
+
+\begin{algorithm}[H]
+	\begin{algorithmic}[1]
+	\footnotesize
+  \State $F$ is optimized $\mathbb{R}^n \rightarrow \mathbb{R}$ function, $Bounds$ is an $\left(\mathbb{R}^2\right)^n$ vector
+  \State $Swarm$ is a set of PSO particles, $Behavior$ is particle's velocity update rule
+  \State $Initializer$ is particle's initial location sampler
+  \State $SamplesArchive$ is an RTree based samples' index
+  \State $BehaviorAdapter$ collects optimum value improvement data
+  \State $RestartManager$ observes swarm state and performance
+  \State $Bounds \gets f.getBounds()$ \Comment {Initially the whole area is considered}
+  \State $PerformanceMonitor.behaviourProbabilities \gets initialProbabilities$
+  \State $LocalOptima \gets \emptyset$ \Comment {Set of optima estimations}
+  \While {Stopping criterion not met}
+	  \For {$Particle \in Swarm$}
+		  \State $Particle.x \gets Initializer.nextSample(Bounds)$
+		  \State $Sample \gets F.evaluate(Particle.x)$
+		  \State $BehaviorAdapter.registerValue(Sample)$
+	  \EndFor
+	  \For {$Particle \in Swarm$}
+		  \State $Particle.v \gets \dfrac{(Particle_i.x - Particle_j.x)}{2.0}$
+	  \EndFor
+	  \While {$RestartManager.shouldOptimizationContinue(Swarm)$}
+		  \For {$Particle \in Swarm$}
+			  \State $Behaviour \gets BehaviorAdapter.sampleBehaviourPool()$ \Comment {Mixing behaviors \label{line:alg:GAPSO:mixing}}
+			  \State $Particle.v \gets Behavior.computeVelocity(Particle,Swarm,Archive)$
+			  \State $Particle.x \gets Particle.x + Particle.v$
+			  \If {$SamplesArchive.stored(Particle.x)$}
+				  \State $Sample \gets SamplesArchive.retrieve(Particle.x)$
+			  \Else
+				  \State $Sample \gets F.evaluate(Particle.x)$
+				  \State $SamplesArchive.store(Sample)$
+			  \EndIf
+			  \State $BehaviorAdapter.registerImprovement(Sample,Behaviour)$
+		  \EndFor
+		  \State $BehaviorAdapter.recomputeBehaviourProbabilities()$
+	  \EndWhile
+	  \State $LocalOptima \gets LocalOptima \cup Swarm.bestSample$
+	  \State $Bounds \gets Initializer(LocalOptima)$ \Comment {Guiding search process}
+  \EndWhile
+  \caption{M-GAPSO high--level pseudocode%
+  \label{alg:GAPSO}}
+  \end{algorithmic}
+  \end{algorithm}
+
+
 %
-% \section{Experimental Procedure}
+\section{Experimental Procedure}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{CPU Timing}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % note that the following text is just a proposal and can/should be changed to your needs:
-In order to evaluate the CPU timing of the algorithm, we have run the \change{MY-ALGORITHM-NAME} on the  \change{bbob test suite \cite{hansen2010fun}} with restarts for a maximum budget equal to \change{$400 (D + 2)$} function evaluations according to \cite{hansen2016exp}. The \change{C/Java/Python/Matlab/Octave} code was run on a \change{Mac Intel(R) Core(TM) i5-2400S CPU @ 2.50GHz} with \change{1} processor and \change{4} cores \change{and (compile) options xxx}. The time per function evaluation for dimensions 2, 3, 5, 10, 20\change{, 40} equals \change{$x.x$}, \change{$x.x$}, \change{$x.x$}, \change{$xx$}, \change{$xxx$}\change{, and $xxx$} seconds respectively. 
-
-
-\change{repeat the above for any algorithm tested}
-
+In order to evaluate the CPU timing of the algorithm, we have run the {SHADE-LM}
+on the {bbob test suite \cite{hansen2010fun}} with restarts for a maximum budget
+equal to {$10^6D)$} function evaluations according to \cite{hansen2016exp}.
+The {Java} code was run on  single core of a {Windows Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz}.
+The time per function evaluation for dimensions 2, 3, 5, 10, 20, 40 equals \change{$x.x$}, \change{$x.x$}, \change{$x.x$}, \change{$xx$}, \change{$xxx$}\change{, and $xxx$} seconds respectively. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -226,7 +306,7 @@ benchmark functions given in \cite{wp200901_2010,hansen2010fun} are
 presented in Figures~\ref{fig:scaling}, \ref{fig:ECDFs05D} and
 \ref{fig:ECDFs20D} and in Tables~\ref{tab:ERTs5} and~\ref{tab:ERTs20}.
 The experiments were performed with COCO \cite{hansen2020cocoplat}, version
-\change{2.4}, the plots were produced with version \change{2.4}.
+{2.3}, the plots were produced with version {2.4}.
 
 The \textbf{expected runtime (ERT)}, used in the figures and tables,
 depends on a given target function value, $\ftarget=\fopt+\Df$, and is
