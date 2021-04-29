@@ -229,7 +229,7 @@ Empirical cumulative distribution of simulated (bootstrapped)
              targets $10^{[-8..2]}$ in dimension #1.
 }
 \providecommand{\cocoversion}{\hspace{\textwidth}\scriptsize\sffamily{}\color{Gray}Data produced with COCO v2.4}
-\providecommand{\numofalgs}{4}
+\providecommand{\numofalgs}{3}
 \providecommand{\bbobECDFslegend}[1]{
 Bootstrapped empirical cumulative distribution of the number of objective function evaluations divided by dimension (FEvals/DIM) for $51$ targets with target precision in $10^{[-8..2]}$ for all functions and subgroups in #1-D. As reference algorithm, the best algorithm from BBOB 2009 is shown as light thick line with diamond markers.
 }
@@ -241,7 +241,6 @@ Legend:
 {\color{NavyBlue}$\circ$}: \algorithmA
 , {\color{Magenta}$\diamondsuit$}: \algorithmB
 , {\color{Orange}$\star$}: \algorithmC
-, {\color{CornflowerBlue}$\triangledown$}: \algorithmD
 }
 % define some COCO/dvipsnames colors because
 % ACM style does not allow to use them directly
@@ -271,7 +270,6 @@ Legend:
 \begin{tabularx}{1.0\textwidth}{@{}c@{}|*{7}{@{}r@{}X@{}}|@{}r@{}@{}l@{}}
 $\Delta f_\mathrm{opt}$ & \multicolumn{2}{@{\,}l@{\,}}{1e1} & \multicolumn{2}{@{\,}l@{\,}}{1e0} & \multicolumn{2}{@{\,}l@{\,}}{1e-1} & \multicolumn{2}{@{\,}l@{\,}}{1e-2} & \multicolumn{2}{@{\,}l@{\,}}{1e-3} & \multicolumn{2}{@{\,}l@{\,}}{1e-5} & \multicolumn{2}{@{\,}l@{\,}}{1e-7} & \multicolumn{2}{|@{}l@{}}{\#succ}\\\hline
 }
-\providecommand{\algDtables}{\StrLeft{KL-BIPOP-CMA-ES}{\ntables}}
 \providecommand{\algCtables}{\StrLeft{R-SHADE-Tanabe}{\ntables}}
 \providecommand{\algBtables}{\StrLeft{SHADE-LM-POP4-to-10}{\ntables}}
 \providecommand{\algAtables}{\StrLeft{SHADE-LM}{\ntables}}
@@ -297,8 +295,7 @@ $\Delta f_\mathrm{opt}$ & \multicolumn{2}{@{\,}l@{\,}}{1e1} & \multicolumn{2}{@{
         $p = 0.05$ or $p = 10^{-k}$ when the number $k$ following the star is larger
         than 1, with Bonferroni correction by the number of functions (24). A $\downarrow$ indicates the same tested against the best algorithm from BBOB 2009. Best results are printed in bold.
         \cocoversion}
-\providecommand{\algsfolder}{SHADE_SHADE_R-SHA_KL-BI/}
-\providecommand{\algorithmA}{KL-BIPOP-CMA-ES}
-\providecommand{\algorithmB}{R-SHADE-Tanabe}
-\providecommand{\algorithmC}{SHADE-LM}
-\providecommand{\algorithmD}{SHADE-LM-POP4-to-10}
+\providecommand{\algsfolder}{SHADE_SHADE_R-SHA/}
+\providecommand{\algorithmA}{R-SHADE-Tanabe}
+\providecommand{\algorithmB}{SHADE-LM}
+\providecommand{\algorithmC}{SHADE-LM-POP4-to-10}

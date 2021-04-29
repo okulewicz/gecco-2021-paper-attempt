@@ -44,20 +44,13 @@
 %\setcopyright{cagovmixed}
 
 
-% DOI
-\acmDOI{10.1145/123_4}
-
-% ISBN
-\acmISBN{123-4567-24-567/18/07}
-
-%Conference
-\acmConference[GECCO '21]{the Genetic and Evolutionary Computation Conference 2021}{July 10--14, 2019}{Lille, France}
-\acmYear{2021}
 \copyrightyear{2021}
-
+\acmYear{2021}
+\setcopyright{acmlicensed}\acmConference[GECCO '21 Companion]{2021 Genetic and Evolutionary Computation Conference Companion}{July 10--14, 2021}{Lille, France}
+\acmBooktitle{2021 Genetic and Evolutionary Computation Conference Companion (GECCO '21 Companion), July 10--14, 2021, Lille, France}
 \acmPrice{15.00}
-
-
+\acmDOI{10.1145/3449726.3463290}
+\acmISBN{978-1-4503-8351-6/21/07}
 
 %%%%%%%%%%%%%%%%%%%%%%   END OF PREAMBLE   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -98,73 +91,31 @@
 \title{Benchmarking SHADE algorithm enhanced with model based optimization on the BBOB noiseless testbed}
 \renewcommand{\shorttitle}{SHADE algorithm enhanced with model based optimization on BBOB}
 
-\author{Michał Okulewicz}
-%\authornote{tba if needed}
-%\orcid{1234-5678-9012}
-\affiliation{%
-  \institution{Faculty of Mathematics and Information Science\\
-  Warsaw University of Technology, Poland}
-%  \streetaddress{P.O. Box 1212}
-%  \city{Dublin} 
-%  \state{Ohio} 
-%  \postcode{43017-6221}
-}
-\email{M.Okulewicz@mini.pw.edu.pl}
-%
-\author{Mateusz Zaborski}
-%\authornote{The secretary disavows any knowledge of this author's actions.}
-\affiliation{%
-  \institution{Faculty of Mathematics and Information Science\\
-  Warsaw University of Technology, Poland}
-%  \streetaddress{P.O. Box 1212}
-%  \city{Dublin} 
-%  \state{Ohio} 
-%  \postcode{43017-6221}
-}
-\email{M.Zaborski@mini.pw.edu.pl}
-%
-%\author{Lars Th{\o}rv{\"a}ld}
-%\authornote{This author is the
-%  one who did all the really hard work.}
-%\affiliation{%
-%  \institution{The Th{\o}rv{\"a}ld Group}
-%  \streetaddress{1 Th{\o}rv{\"a}ld Circle}
-%  \city{Hekla} 
-%  \country{Iceland}}
-%\email{larst@affiliation.org}
-%
-%\author{Lawrence P. Leipuner}
-%\affiliation{
-%  \institution{Brookhaven Laboratories}
-%  \streetaddress{P.O. Box 5000}}
-%\email{lleipuner@researchlabs.org}
-%
-%\author{Sean Fogarty}
-%\affiliation{%
-%  \institution{NASA Ames Research Center}
-%  \city{Moffett Field}
-%  \state{California} 
-%  \postcode{94035}}
-%\email{fogartys@amesres.org}
-%
-%\author{Charles Palmer}
-%\affiliation{%
-%  \institution{Palmer Research Laboratories}
-%  \streetaddress{8600 Datapoint Drive}
-%  \city{San Antonio}
-%  \state{Texas} 
-%  \postcode{78229}}
-%\email{cpalmer@prl.com}
-%
-%\author{John Smith}
-%\affiliation{\institution{The Th{\o}rv{\"a}ld Group}}
-%\email{jsmith@affiliation.org}
-%
-%\author{Julius P.~Kumquat}
-%\affiliation{\institution{The Kumquat Consortium}}
-%\email{jpkumquat@consortium.net}
+% \author{Michał Okulewicz}
+% %\authornote{tba if needed}
+% %\orcid{1234-5678-9012}
+% \affiliation{%
+%   \institution{Faculty of Mathematics and Information Science\\
+%   Warsaw University of Technology, Poland}
+% %  \streetaddress{P.O. Box 1212}
+% %  \city{Dublin} 
+% %  \state{Ohio} 
+% %  \postcode{43017-6221}
+% }
+% \email{M.Okulewicz@mini.pw.edu.pl}
+% %
+% \author{Mateusz Zaborski}
+% %\authornote{The secretary disavows any knowledge of this author's actions.}
+% \affiliation{%
+%   \institution{Faculty of Mathematics and Information Science\\
+%   Warsaw University of Technology, Poland}
+% %  \streetaddress{P.O. Box 1212}
+% %  \city{Dublin} 
+% %  \state{Ohio} 
+% %  \postcode{43017-6221}
+% }
+% \email{M.Zaborski@mini.pw.edu.pl}
 
-% The default list of authors is too long for headers}
 \renewcommand{\shortauthors}{Firstname Lastname et. al.}
 
 
@@ -172,10 +123,10 @@
  In this paper we evaluate the SHADE-LM algorithm on the BBOB noiseless testbed.
  The algorithm hybridizes the SHADE algorithm with a model based optimization.
  This hybridization is performed in a transparent manner for both optimizers,
- with SHADE having access to the samples improved by model based optimization,
- and models of square function are fitted on the current population.
- The paper compares this extended version with the performance of original
- R-SHADE and KL-BIPOP-CMAES.
+ with SHADE having access to the samples provided by model based optimization,
+ and models of square functions are fitted on the current population.
+ The paper compares this extended version with the performance of the 
+ version of SHADE by Tanabe and Fukunaga.
 \end{abstract}
 
 
@@ -184,7 +135,7 @@
 % http://dl.acm.org/ccs.cfm
 % Please copy and paste the code instead of the example below. 
 %
- \begin{CCSXML}
+\begin{CCSXML}
 <ccs2012>
 <concept>
 <concept_id>10010147.10010178.10010205.10010208</concept_id>
@@ -196,92 +147,246 @@
 
 \ccsdesc[500]{Computing methodologies~Continuous space search}
 
-
 % We no longer use \terms command
 %\terms{Algorithms}
 
 % Complete with anything that is needed
-\keywords{Benchmarking, Black-box optimization}
+\keywords{SHADE, Model based optimization, Black-box optimization}
 
 \maketitle
-
 
 \section{Introduction}
 
 R-SHADE \cite{Tanabe2014} algorithm has been proposed as one of the more successful
-modification of Differential Evolution, following the path of adapting the scale
+modification of a Differential Evolution, following the path of adapting the scale
 and cross-over probability factors, employing the archive of previous best samples,
 utilizing the current-to-best position update and restart mechanism based on population
 locations or values spread.
 
 Hybridizing plain Particle Swarm Optimization (PSO) and Differential Evolution (DE)
-algorithms with model based optimizer has already been proved
+algorithms with model based optimizers has been proved
 to improve their performance \cite{zaborski2019generalized,zaborski2020analysis,Okulewicz2020}.
 
-In this paper we utilize our Generalized Adaptive Particle Swarm Optimization (GAPSO) framework
-\cite{ulinski2018generalized,Okulewicz2020}
-and implement within it a version of SHADE \cite{Tanabe2014} and model based optimizer \cite{zaborski2020analysis}.
+In this paper we utilize Generalized Adaptive Particle Swarm Optimization (GAPSO) framework \cite{ulinski2018generalized,Okulewicz2020}
+and implement within it a version of SHADE \cite{Tanabe2014} and a model based optimizer \cite{zaborski2020analysis}.
 %
-\section{GAPSO Framework Concept}
+\section{GAPSO Framework}
 The concept of GAPSO framework is to allow for hybridization of optimization algorithms,
 in a way which will be transparent to the hybridized methods.
 This approach comes from the observation that methods such as PSO or DE,
 need only a minimal amount of information (i.e. locations and values
 of the previously sampled locations). Please note that PSO's velocity
-is simply a difference between previous and current location.
+fits into this need as it is a difference between previous and current location.
 Therefore an algorithm which stores current, previous and best location
 for each individual (particle) allows to employ sampling of both DE and PSO
-based algorithms, in a transparent manner from the point of view of individual.
+based algorithms, in a transparent manner from the point of view of an individual (particle).
 
-\section{SHADE-LM Algorithm Presentation}
+\section{SHADE-LM Algorithm}
 
-\begin{algorithm}[H]
+SHADE-LM hybridizes the utilization of population based SHADE
+algorithm, based on \cite{Tanabe2014} and model based optimizer
+utilizing square functions \cite{zaborski2020analysis}.
+
+\subsection{SHADE}
+
+SHADE is a form of population based Differential Evolution algorithm utilizing:
+\begin{itemize}
+	\item archive of samples which were previous-best
+	\item list of adaptable cross-over and scale probabilities
+	\item current-to-pbest type of DE mutation operator (\ref{eq:de}) 
+\end{itemize}
+
+\begin{equation}
+	u^{(i)} = x^{(i)} + F_{it} * (x^{(pBest)} - x^{(i)}) + F_{it} * (x^{(rand1)} - x^{(rand2)})
+	\label{eq:de}
+\end{equation}
+
+Single iteration of the SHADE pseudocode is given in Algorithm~\ref{alg:shade}.
+
+\begin{algorithm}[ht]
 	\begin{algorithmic}[1]
 	\footnotesize
-  \State $F$ is optimized $\mathbb{R}^n \rightarrow \mathbb{R}$ function, $Bounds$ is an $\left(\mathbb{R}^2\right)^n$ vector
-  \State $Swarm$ is a set of PSO particles, $Behavior$ is particle's velocity update rule
-  \State $Initializer$ is particle's initial location sampler
-  \State $SamplesArchive$ is an RTree based samples' index
-  \State $BehaviorAdapter$ collects optimum value improvement data
-  \State $RestartManager$ observes swarm state and performance
-  \State $Bounds \gets f.getBounds()$ \Comment {Initially the whole area is considered}
-  \State $PerformanceMonitor.behaviourProbabilities \gets initialProbabilities$
-  \State $LocalOptima \gets \emptyset$ \Comment {Set of optima estimations}
-  \While {Stopping criterion not met}
-	  \For {$Particle \in Swarm$}
-		  \State $Particle.x \gets Initializer.nextSample(Bounds)$
-		  \State $Sample \gets F.evaluate(Particle.x)$
-		  \State $BehaviorAdapter.registerValue(Sample)$
-	  \EndFor
-	  \For {$Particle \in Swarm$}
-		  \State $Particle.v \gets \dfrac{(Particle_i.x - Particle_j.x)}{2.0}$
-	  \EndFor
-	  \While {$RestartManager.shouldOptimizationContinue(Swarm)$}
-		  \For {$Particle \in Swarm$}
-			  \State $Behaviour \gets BehaviorAdapter.sampleBehaviourPool()$ \Comment {Mixing behaviors \label{line:alg:GAPSO:mixing}}
-			  \State $Particle.v \gets Behavior.computeVelocity(Particle,Swarm,Archive)$
-			  \State $Particle.x \gets Particle.x + Particle.v$
-			  \If {$SamplesArchive.stored(Particle.x)$}
-				  \State $Sample \gets SamplesArchive.retrieve(Particle.x)$
-			  \Else
-				  \State $Sample \gets F.evaluate(Particle.x)$
-				  \State $SamplesArchive.store(Sample)$
-			  \EndIf
-			  \State $BehaviorAdapter.registerImprovement(Sample,Behaviour)$
-		  \EndFor
-		  \State $BehaviorAdapter.recomputeBehaviourProbabilities()$
-	  \EndWhile
-	  \State $LocalOptima \gets LocalOptima \cup Swarm.bestSample$
-	  \State $Bounds \gets Initializer(LocalOptima)$ \Comment {Guiding search process}
-  \EndWhile
-  \caption{M-GAPSO high--level pseudocode%
-  \label{alg:GAPSO}}
+	\State $F_{it} \gets SelectScaleFactorFromSlot(slot)$
+	\State $cp_{it} \gets SelectCrossOverFactor(slot)$
+	\For {$i \in 1 to pop.size$}
+		\State $F_{i} \gets SampleFromCauchyDistribution(F_{it}, 0.1)$
+		\State $cp_{i} \gets SampleFromNormalDistribution(cp_{it}, 0.1)$
+		\State $x^{(pBest)} \gets SelectOneOfPBestIndividuals(pBestRatio)$
+		\State $x^{(rand1)} \gets SelectIndividualFromCurrentPopulation()$
+		\State $x^{(rand2)} \gets SelectIndividualFromCurrentPopulationOrArchive()$
+		\State $u^{(i)} \gets GetSample(x^{(pBest)}, x^{(rand1)}, x^{(rand2)}, x^{(i)}, F_{i})$
+		\State $y^{(i)} \gets ApplyCrossOver(x^{(pBest)}, u^{(i)}, cp_{i})$
+		\If {$f(y^{(i)}) < f(x^{(i)})$}
+			\State $PushToArchive(x^{(i)})$
+			\State $x^{(i)} \gets y^{(i)}$
+			\State $StoreSuccessfulFactors(F_{i}, cp_{i})$
+		\EndIf
+	\EndFor
+	\State $AdaptScaleAndCrossOverFactors()$
+	\State $slot \gets slot + 1$
+\caption{Single iteration of SHADE%
+  \label{alg:shade}}
   \end{algorithmic}
   \end{algorithm}
 
 
+\subsection{Model based optimizers}
+
+Model based optimizer fits the linear combination
+of $a_i$, $b_i$, $c$ coefficients for a simple
+$N$-dimensional square function (\ref{eq:simple}), or if the population
+size allows it a full $N$-dimensional square function (\ref{eq:full}).
+
+\begin{equation}
+	\hat{f}_{simple}(x) = \sum\limits_{i=1}^{N}(a_ix_i^2 + b_ix_i) + c
+	\label{eq:simple}
+\end{equation}
+
+\begin{equation}
+	\hat{f}_{full}(x) = \sum\limits_{i=1}^{N} \left( b_ix_i + \sum\limits_{j=1}^{i}(a_{i,j}x_ix_j )\right) + c
+	\label{eq:full}
+\end{equation}
+
+Model is fitted on the samples already gathered during the optimization process,
+regardless of their source.
+In the case of SHADE-LM models are fitted on the current population.
+If the population size is big enough a full square model is fitted,
+otherwise the simple one is chosen.
+
+For simplicity the system of linear equations (\ref{eq:coef}) for the coefficients of simple square model is given.
+
+\begin{align}
+	\begin{bmatrix}
+		(x^{(1)}_1)^2 & x^{(1)}_1 &  \ldots & 1 \\           
+   \vdots & \vdots  & \vdots &  \vdots  \\
+   (x^{(pop.size)}_1)^2 & x^{(pop.size)}_1 & \ldots & 1
+  \end{bmatrix} 
+  \begin{bmatrix}
+	a_{1} \\           
+	b_{1} \\           
+	\vdots \\
+	a_{N} \\           
+	b_{N} \\           
+	c
+   \end{bmatrix}
+	=
+	\begin{bmatrix}
+		f(x^{(1)}) \\           
+		\vdots \\
+		f(x^{(pop.size)})
+	   \end{bmatrix}
+	 \label{eq:coef}
+\end{align}
+
+
+After a model is fitted the optimizer samples the stationary point $x_\theta$
+of the model $\hat{f}$ function by solving the system of linear equations for coefficients of first derivatives of $\hat{f}$.
+
+\begin{align}
+			\begin{bmatrix}
+				2a_{1,1} & \ldots & a_{N,1} \\           
+           \vdots & \ddots & \vdots   \\
+           a_{N,1} & \ldots & 2a_{N_N}
+          \end{bmatrix} 
+		  \begin{bmatrix}
+			x_{\theta1} \\           
+			\vdots \\
+			x_{\theta N}
+		   \end{bmatrix}
+			=
+	  \begin{bmatrix}
+           -b_1 \\
+           \vdots \\
+           -b_N
+         \end{bmatrix}
+  \end{align}
+
+
+\subsection{Proposed algorithm}
+
+Pseudocode of the proposed algorithm is given in Algorithm \ref{alg:shade-lm}
+
+\begin{algorithm}[H]
+	\begin{algorithmic}[1]
+	\footnotesize
+	\State $InitializePopulation()$
+	\While {$OptimizationBudgetIsLeft()$}
+		\State $ModelIndividualsSet \gets SelectIndividualsForModelApplication()$
+		\State $SelectSHADEFactors()$
+		\For{$Individual$ in $Population$}
+			\If {$Individual \in ModelIndividualsSet$}
+				\State $y \gets GetSampleAsModelFunctionStationaryPoint()$
+			\Else
+				\State $y \gets GetSampleAsInSHADEAndStoreShadeFactors()$
+			\EndIf
+			\If {$f(y) < f(Individual.x)$}
+				\State $PushToArchive(Individual.x)$
+				\State $Individual.x \gets y^{(i)}$
+			\EndIf
+		\EndFor
+		\State $AdaptSHADEFactors()$
+		\If {$ShouldBeRestarted(Population)$}
+			\State $ReInitializePopulation()$
+			\State $ResetSHADE()$
+		\EndIf
+	\EndWhile
+	\caption{SHADE-LM pseudocode%
+	\label{alg:shade-lm}}
+	\end{algorithmic}
+	\end{algorithm}
+  
+
 %
 \section{Experimental Procedure}
+
+We have run 2 configurations of our proposed approach,
+with the settings as given in the \ref{tab:algorithm-settings}.
+Both configuration utilize the same restart procedure,
+relying on population values or location convergence
+below a certain threshold or no improvements in the global best
+value for a certain amount of evaluations.
+Both configurations rely on the SHADE algorithm,
+configured roughly like its original version \cite{Tanabe2014},
+with the exception of omitting population size decrease during
+a single run of the algorithm.
+Both configurations utilize the same proportion of samples
+taken from square function model optimum.
+The difference between SHADE-LM and SHADE-LM-POP4-to-10,
+is within the management of population size.
+SHADE-LM employs a large population of $10 \times$ function dimensionality ($D$),
+while SHADE-LM-POP4-to-10 gradually increases its population from
+$4D$ to $10D$ gradually increasing it after algorithm restart
+by $1.2$ factor.
+
+\begin{table}[!ht]
+	\caption{Settings of the SHADE-LM algorithm
+	\label{tab:algorithm-settings}}
+	\begin{center}
+	\begin{tabular}{lr}
+		\multicolumn{2}{c}{\textbf{General settings}} \\
+		Optimization budget & $10^6 \times D$ \\
+		\multicolumn{2}{c}{\textbf{Specific SHADE-LM settings}} \\
+		Population size & $10D$ \\
+		\multicolumn{2}{c}{\textbf{Specific SHADE-LM-POP4-to-10 settings}} \\
+		Population size & $4D$ - $10D$ \\
+		Population size increase after restart & $1.2$ \\
+		\multicolumn{2}{c}{\textbf{Model based optimizer parameters}} \\
+		Model based optimizer use count & $0.05 \times$ pop. size \\
+		\multicolumn{2}{c}{\textbf{Restart parameters}} \\
+    No improvement evaluations & $5000D$ \\
+    Values convergence & $10^{-12}$ \\
+    Locations convergence & $10^{-12}$ \\
+		\multicolumn{2}{c}{\textbf{SHADE parameters}} \\
+		Initial cross-over probability & $0.9$ \\
+		Initial mutation scaling factor & $0.38$ \\
+    Parameters slots & $11$ \\
+    $pBest$ count & $0.11 \times$ pop. size \\
+    Archive size & $0.12 \times$ pop. size \\
+	\end{tabular}
+\end{center}
+\end{table}
+
+
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{CPU Timing}
@@ -291,7 +396,13 @@ In order to evaluate the CPU timing of the algorithm, we have run the {SHADE-LM}
 on the {bbob test suite \cite{hansen2010fun}} with restarts for a maximum budget
 equal to {$10^6D)$} function evaluations according to \cite{hansen2016exp}.
 The {Java} code was run on  single core of a {Windows Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz}.
-The time per function evaluation for dimensions 2, 3, 5, 10, 20, 40 equals \change{$x.x$}, \change{$x.x$}, \change{$x.x$}, \change{$xx$}, \change{$xxx$}\change{, and $xxx$} seconds respectively. 
+The time per function evaluation for dimensions 2, 3, 5, 10, 20 equals
+$1.70\times10^{-5}$,
+{$1.08\times10^{-5}$},
+{$1.49\times10^{-5}$},
+{$2.42\times10^{-5}$},
+and {$5.20\times10^{-5}$}
+seconds respectively. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
@@ -320,6 +431,23 @@ was not reached, the best $\Df$-value achieved, measured only up to
 the smallest number of overall function evaluations for any
 unsuccessful trial under consideration.
 
+Proposed SHADE-LM and SHADE-LM-POP4-to-10 configurations,
+improved the overall performance of the original R-SHADE algorithm.
+Original R-SHADE was found to be definitely better only for $f21$
+and $f22$ function on $20D$.
+
+Additionally, we have observed that starting with a smaller population size
+of $4D$ improves the performance for low optimization budget,
+up to $10^3 \ times D$. Setting population size to its final value
+of $10D$ proves beneficial in the long run for the optimization
+budgets higher than $10^4 \ times D$, especially for dimensions $10$
+and $20$.
+
+For future work we plan to include within this hybrid also the CMA-ES
+optimizer which poses an additional challenge of adapting CMA-ES' covariance
+matrix and $\sigma$ on the basis of other algorithms samples.
+Initial experiments proved it to be non-trivial as CMA-ES is easily destabilized
+after recalculating those parameters on the basis of external samples.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
