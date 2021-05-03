@@ -48,8 +48,9 @@
 %%%%%%%%% TO BE EDITED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % specify acronyms for algorithm1 (1st arg. of post-processing) and algorithm2 (2nd arg.) 
-%\newcommand{\algorithmA}{algorithmB}  % first argument in the post-processing
-%\newcommand{\algorithmB}{algorithmB}  % second argument in the post-processing
+\newcommand{\algorithmA}{SHADE-LM (SL-10)}  % first argument in the post-processing
+\newcommand{\algorithmB}{SHADE-LM-POP4-to-10 (SL-4-10)}  % second argument in the post-processing
+\newcommand{\algorithmC}{R-SHADE-10e5 (R-SHADE-Tanabe)}  % first argument in the post-processing
 % for the short acronyms in the tables, adjust the following to lines if required.
 %\newcommand{\algorithmAshort}{algA}  % first argument in the post-processing
 %\newcommand{\algorithmBshort}{algB}  % second argument in the post-processing
@@ -200,7 +201,7 @@ Single iteration of the SHADE pseudocode is given in Algorithm~\ref{alg:shade}.
 	\footnotesize
 	\State $F_{it} \gets SelectScaleFactorFromSlot(slot)$
 	\State $cp_{it} \gets SelectCrossOverFactor(slot)$
-	\For {$i \in 1 to pop.size$}
+	\For {$i \in 1$ to $pop.size$}
 		\State $F_{i} \gets SampleFromCauchyDistribution(F_{it}, 0.1)$
 		\State $cp_{i} \gets SampleFromNormalDistribution(cp_{it}, 0.1)$
 		\State $x^{(pBest)} \gets SelectOneOfPBestIndividuals(pBestRatio)$
@@ -332,7 +333,7 @@ Pseudocode of the proposed algorithm is given in Algorithm \ref{alg:shade-lm}
 \section{Experimental Procedure}
 
 We have run 2 configurations of our proposed approach,
-with the settings as given in the \ref{tab:algorithm-settings}.
+with the settings as given in Table~\ref{tab:algorithm-settings}.
 Both configuration utilize the same restart procedure,
 relying on population values or location convergence
 below a certain threshold or no improvements in the global best
@@ -347,8 +348,9 @@ The difference between SHADE-LM (SL-10) and SHADE-LM-POP4-to-10 (SL-4-10),
 is within the management of population size.
 SHADE-LM employs a large population of $10 \times$ function dimensionality ($D$),
 while SHADE-LM-POP4-to-10 gradually increases its population from
-$4D$ to $10D$ gradually increasing it after algorithm restart
+$4D$ to $10D$ after each algorithm restart
 by $1.2$ factor.
+Baseline for our experiments was the R-SHADE-10e5 configuration of the original R-SHADE\cite{Tanabe2014}.
 
 \begin{table}[!ht]
 	\caption{Settings of the SHADE-LM algorithm
@@ -386,7 +388,7 @@ by $1.2$ factor.
 % note that the following text is just a proposal and can/should be changed to your needs:
 In order to evaluate the CPU timing of the algorithm, we have run the {SHADE-LM}
 on the {bbob test suite \cite{hansen2010fun}} with restarts for a maximum budget
-equal to {$10^6D)$} function evaluations according to \cite{hansen2016exp}.
+equal to {$10^6D$} function evaluations according to \cite{hansen2016exp}.
 The {Java} code was run on  single core of a {Windows Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz}.
 The time per function evaluation for dimensions 2, 3, 5, 10, 20 equals
 $1.70\times10^{-5}$,
@@ -400,7 +402,7 @@ seconds respectively.
 \section{Results}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Results from experiments according to \cite{hansen2016exp} and \cite{hansen2016perfass} on the
+Results from SHADE-LM (denoted SL-10) and SHADE-LM-POP4-to-10 (denoted SL-4-10) experiments performed according to \cite{hansen2016exp} and \cite{hansen2016perfass} on the
 benchmark functions given in \cite{wp200901_2010,hansen2010fun} are
 presented in Figures~\ref{fig:scaling}, \ref{fig:ECDFs05D} and
 \ref{fig:ECDFs20D} and in Tables~\ref{tab:ERTs5} and~\ref{tab:ERTs20}.
@@ -430,9 +432,9 @@ and $f22$ function on $20D$.
 
 Additionally, we have observed that starting with a smaller population size
 of $4D$ improves the performance for low optimization budget,
-up to $10^3 \ times D$. Setting population size to its final value
+up to $10^3 \times D$. Setting population size to its final value
 of $10D$ proves beneficial in the long run for the optimization
-budgets higher than $10^4 \ times D$, especially for dimensions $10$
+budgets higher than $10^4 \times D$, especially for dimensions $10$
 and $20$.
 
 For future work we plan to include within this hybrid also the CMA-ES
