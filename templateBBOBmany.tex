@@ -234,6 +234,9 @@ Model based optimizer fits the linear combination
 of $a_i$, $b_i$, $c$ coefficients for a simple
 $N$-dimensional square function (\ref{eq:simple}), or if the population
 size allows it a full $N$-dimensional square function (\ref{eq:full}).
+Models can be fitted on the samples already gathered during the optimization process,
+regardless of their source.
+In the case of SHADE-LM models are fitted on the current population of the algorithm.
 
 \begin{equation}
 	\hat{f}_{simple}(x) = \sum\limits_{i=1}^{N}(a_ix_i^2 + b_ix_i) + c
@@ -245,11 +248,19 @@ size allows it a full $N$-dimensional square function (\ref{eq:full}).
 	\label{eq:full}
 \end{equation}
 
-Model is fitted on the samples already gathered during the optimization process,
-regardless of their source.
-In the case of SHADE-LM models are fitted on the current population.
-If the population size is big enough a full square model is fitted,
-otherwise the simple one is chosen.
+If the population size is larger than $min.full.samples$ (Eq.~(\ref{eq:min.samples.full.model}))
+a full square model is fitted, if the population size is larger than $min.simple.samples$
+(Eq.~(\ref{eq:min.samples.simple.model})) the simple one is chosen.
+
+\begin{equation}
+	min.simple.samples = 2D + 1
+	\label{eq:min.samples.simple.model}
+\end{equation}
+
+\begin{equation}
+	min.full.samples = \dfrac{D^2+ 3D}{2} + 1
+	\label{eq:min.samples.full.model}
+\end{equation}
 
 For simplicity the system of linear equations (\ref{eq:coef}) for the coefficients of simple square model is given.
 
@@ -299,6 +310,8 @@ of the model $\hat{f}$ function by solving the system of linear equations for co
          \end{bmatrix}
   \end{align}
 
+If no model can be fitted due to a too small number of samples or singularity of samples matrix,
+than a random sample will be selected within the hyperrectangle bounds defined by the samples set.
 
 \subsection{Proposed algorithm}
 
