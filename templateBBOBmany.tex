@@ -310,8 +310,16 @@ of the model $\hat{f}$ function by solving the system of linear equations for co
          \end{bmatrix}
   \end{align}
 
+\subsubsection{Special cases}
+
+If the computed stationary point is outside the bounds defined by sample set,
+a boundary point closest to the stationary point is selected.
+
 If no model can be fitted due to a too small number of samples or singularity of samples matrix,
 than a random sample will be selected within the hyperrectangle bounds defined by the samples set.
+
+If the computed simple model is concave along a certain dimension, a boundary point with a minimal model value is selected. For the full model we are currently not detecting convexity, so selecting the model maximum or saddle point simply
+has the effect of sampling a random point within the samples bounds.
 
 \subsection{Proposed algorithm}
 
