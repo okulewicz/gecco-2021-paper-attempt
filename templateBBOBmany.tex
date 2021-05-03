@@ -262,7 +262,7 @@ a full square model is fitted, if the population size is larger than $min.simple
 	\label{eq:min.samples.full.model}
 \end{equation}
 
-For simplicity the system of linear equations (\ref{eq:coef}) for the coefficients of simple square model is given.
+For simplicity the example for the coefficients of simple square model is given in Eq.~(\ref{eq:coef}). The $a_i$, $b_i$ and $c$ coefficients are chosen through the minimization of $MSE = \dfrac{\sum\limits_{i=1}^{pop.size}(\hat{f}(x_i)-f(x_i))^2}{pop.size}$.
 
 \begin{align}
 	\begin{bmatrix}
@@ -280,16 +280,15 @@ For simplicity the system of linear equations (\ref{eq:coef}) for the coefficien
    \end{bmatrix}
 	=
 	\begin{bmatrix}
-		f(x^{(1)}) \\           
+		\hat{f}(x^{(1)}) \\           
 		\vdots \\
-		f(x^{(pop.size)})
+		\hat{f}(x^{(pop.size)})
 	   \end{bmatrix}
 	 \label{eq:coef}
 \end{align}
 
-
 After a model is fitted the optimizer samples the stationary point $x_\theta$
-of the model $\hat{f}$ function by solving the system of linear equations for coefficients of first derivatives of $\hat{f}$.
+of the model $\hat{f}$ function by solving the system of linear equations for coefficients of first derivatives of $\hat{f}$ (given for the general case in Eq.~(\ref{eq:stationary}).
 
 \begin{align}
 			\begin{bmatrix}
@@ -308,6 +307,7 @@ of the model $\hat{f}$ function by solving the system of linear equations for co
            \vdots \\
            -b_N
          \end{bmatrix}
+		 \label{eq:stationary}
   \end{align}
 
 \subsubsection{Special cases}
