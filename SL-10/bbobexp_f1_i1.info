@@ -1,0 +1,15 @@
+suite = 'bbob', funcId = 1, DIM = 2, Precision = 1.000e-008, algId = 'SHADE2-BLM-reset-initLM-6-res5000-a3d799f', coco_version = '2.3', logger = 'bbob', data_format = 'bbob-new2'
+%
+data_f1/bbobexp_f1_DIM2_i1.dat, 1:20|0.0e+000, 2:20|0.0e+000, 3:20|0.0e+000, 4:20|0.0e+000, 5:20|0.0e+000, 71:20|0.0e+000, 72:20|0.0e+000, 73:20|0.0e+000, 74:20|0.0e+000, 75:20|0.0e+000, 76:20|0.0e+000, 77:20|0.0e+000, 78:20|0.0e+000, 79:20|0.0e+000, 80:20|0.0e+000
+suite = 'bbob', funcId = 1, DIM = 3, Precision = 1.000e-008, algId = 'SHADE2-BLM-reset-initLM-6-res5000-a3d799f', coco_version = '2.3', logger = 'bbob', data_format = 'bbob-new2'
+%
+data_f1/bbobexp_f1_DIM3_i1.dat, 1:30|0.0e+000, 2:30|0.0e+000, 3:30|0.0e+000, 4:30|0.0e+000, 5:30|0.0e+000, 71:30|0.0e+000, 72:30|0.0e+000, 73:30|0.0e+000, 74:30|0.0e+000, 75:30|0.0e+000, 76:30|0.0e+000, 77:30|0.0e+000, 78:30|0.0e+000, 79:30|0.0e+000, 80:30|0.0e+000
+suite = 'bbob', funcId = 1, DIM = 5, Precision = 1.000e-008, algId = 'SHADE2-BLM-reset-initLM-6-res5000-a3d799f', coco_version = '2.3', logger = 'bbob', data_format = 'bbob-new2'
+%
+data_f1/bbobexp_f1_DIM5_i1.dat, 1:50|0.0e+000, 2:50|0.0e+000, 3:50|0.0e+000, 4:50|0.0e+000, 5:50|0.0e+000, 71:50|0.0e+000, 72:50|0.0e+000, 73:50|0.0e+000, 74:50|0.0e+000, 75:50|0.0e+000, 76:50|0.0e+000, 77:50|0.0e+000, 78:50|0.0e+000, 79:50|0.0e+000, 80:50|0.0e+000
+suite = 'bbob', funcId = 1, DIM = 10, Precision = 1.000e-008, algId = 'SHADE2-BLM-reset-initLM-6-res5000-a3d799f', coco_version = '2.3', logger = 'bbob', data_format = 'bbob-new2'
+%
+data_f1/bbobexp_f1_DIM10_i1.dat, 1:100|0.0e+000, 2:100|0.0e+000, 3:100|0.0e+000, 4:100|0.0e+000, 5:100|0.0e+000, 71:100|0.0e+000, 72:100|0.0e+000, 73:100|0.0e+000, 74:100|0.0e+000, 75:100|0.0e+000, 76:100|0.0e+000, 77:100|0.0e+000, 78:100|0.0e+000, 79:100|0.0e+000, 80:100|0.0e+000
+suite = 'bbob', funcId = 1, DIM = 20, Precision = 1.000e-008, algId = 'SHADE2-BLM-reset-initLM-6-res5000-a3d799f', coco_version = '2.3', logger = 'bbob', data_format = 'bbob-new2'
+%
+data_f1/bbobexp_f1_DIM20_i1.dat, 1:200|0.0e+000, 2:200|0.0e+000, 3:200|0.0e+000, 4:200|0.0e+000, 5:200|0.0e+000, 71:200|0.0e+000, 72:200|0.0e+000, 73:200|0.0e+000, 74:200|0.0e+000, 75:200|0.0e+000, 76:200|0.0e+000, 77:200|0.0e+000, 78:200|0.0e+000, 79:200|0.0e+000, 80:200|0.0e+000
