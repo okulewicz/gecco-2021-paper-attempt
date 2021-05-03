@@ -156,20 +156,25 @@ and cross-over probability factors, employing the archive of previous best sampl
 utilizing the current-to-best position update and restart mechanism based on population
 locations or values spread.
 
-Hybridizing plain Particle Swarm Optimization (PSO) and Differential Evolution (DE)
-algorithms with model based optimizers has been proved
-to improve their performance \cite{zaborski2019generalized,zaborski2020analysis,Okulewicz2020}.
+One of the methods of improving algorithm performance is to hybridize it with another
+one, preferably one with different search strategy.
+In our previous work we hybridized basic Particle Swarm Optimization (PSO) and Differential Evolution (DE) algorithms with model based optimizers.
+This hybridization has improved PSO's and DE's performance \cite{zaborski2019generalized,zaborski2020analysis,Okulewicz2020} and led us to design a Generalized Adaptive Particle Swarm Optimization (GAPSO) framework\cite{ulinski2018generalized,Okulewicz2020}.
 
-In this paper we utilize Generalized Adaptive Particle Swarm Optimization (GAPSO) framework \cite{ulinski2018generalized,Okulewicz2020}
-and implement within it a version of SHADE \cite{Tanabe2014} and a model based optimizer \cite{zaborski2020analysis}.
+The design concept of the GAPSO framework was a step towards a seamless hybridization
+of various optimization algorithms.
+In this paper we utilize the concept of GAPSO framework, to implement within it a version of SHADE \cite{Tanabe2014} and a model based optimizer \cite{zaborski2020analysis} in order to verify if the model-based optimizer
+would improve upon a state-of-the-art R-SHADE algorithm, as it did on
+the basic version of PSO and DE.
 %
 \section{GAPSO Framework}
 The concept of GAPSO framework is to allow for hybridization of optimization algorithms,
 in a way which will be transparent to the hybridized methods.
-This approach comes from the observation that methods such as PSO or DE,
-need only a minimal amount of information (i.e. locations and values
-of the previously sampled locations). Please note that PSO's velocity
-fits into this need as it is a difference between previous and current location.
+The framework is named after PSO, as it follows the swarm intelligence design principle
+of achieving synergy through communicating independent beings.
+GAPSO approach comes from the observation that methods such as PSO or DE,
+need only a minimal amount of information about the other individuals (i.e. locations and values of the previously sampled locations) and each individual maintains its own
+location (Please note that PSO's velocity fits into this, as it is simply a difference between previous and current location).
 Therefore an algorithm which stores current, previous and best location
 for each individual (particle) allows to employ sampling of both DE and PSO
 based algorithms, in a transparent manner from the point of view of an individual (particle).
@@ -184,9 +189,9 @@ utilizing square functions \cite{zaborski2020analysis}.
 
 SHADE is a form of population based Differential Evolution algorithm utilizing:
 \begin{itemize}
-	\item archive of samples which were previous-best
+	\item archive of samples which have been replaced in the population
 	\item list of adaptable cross-over and scale probabilities
-	\item current-to-pbest type of DE mutation operator (\ref{eq:de}) 
+	\item $current-to-pbest$ type of DE mutation operator, shown in Eq.~(\ref{eq:de}) 
 \end{itemize}
 
 \begin{equation}
