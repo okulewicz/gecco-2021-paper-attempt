@@ -207,17 +207,17 @@ Single iteration of the SHADE pseudocode is given in Algorithm~\ref{alg:shade}.
 	\State $F_{it} \gets SelectScaleFactorFromSlot(slot)$
 	\State $cp_{it} \gets SelectCrossOverFactor(slot)$
 	\For {$i \in 1$ to $pop.size$}
-		\State $F_{i} \gets SampleFromCauchyDistribution(F_{it}, 0.1)$
+		\State $F_{i} \gets SampleFromCauchyDistribution(F_{it}, 0.1)$ \label{alg:shade:line:params-get}
 		\State $cp_{i} \gets SampleFromNormalDistribution(cp_{it}, 0.1)$
 		\State $x^{(pBest)} \gets SelectOneOfPBestIndividuals(pBestRatio)$
 		\State $x^{(rand1)} \gets SelectIndividualFromCurrentPopulation()$
 		\State $x^{(rand2)} \gets SelectIndividualFromCurrentPopulationOrArchive()$
 		\State $u^{(i)} \gets GetSample(x^{(pBest)}, x^{(rand1)}, x^{(rand2)}, x^{(i)}, F_{i})$
-		\State $y^{(i)} \gets ApplyCrossOver(x^{(pBest)}, u^{(i)}, cp_{i})$
+		\State $y^{(i)} \gets ApplyCrossOver(x^{(pBest)}, u^{(i)}, cp_{i})$ \label{alg:shade:line:samples-get}
 		\If {$f(y^{(i)}) < f(x^{(i)})$}
 			\State $PushToArchive(x^{(i)})$
 			\State $x^{(i)} \gets y^{(i)}$
-			\State $StoreSuccessfulFactors(F_{i}, cp_{i})$
+			\State $StoreSuccessfulFactors(F_{i}, cp_{i})$ \label{alg:shade:line:store-factor}
 		\EndIf
 	\EndFor
 	\State $AdaptScaleAndCrossOverFactors()$
@@ -343,7 +343,7 @@ Pseudocode of the proposed algorithm is given in Algorithm \ref{alg:shade-lm}
 				\State $Individual.x \gets y^{(i)}$
 			\EndIf
 		\EndFor
-		\State $AdaptSHADEFactors()$
+		\State $AdaptSHADEScaleAndCrossOverFactors()$
 		\If {$ShouldBeRestarted(Population)$}
 			\State $ReInitializePopulation()$
 			\State $ResetSHADE()$
@@ -354,8 +354,32 @@ Pseudocode of the proposed algorithm is given in Algorithm \ref{alg:shade-lm}
 	\end{algorithmic}
 	\end{algorithm}
   
+The algorithm works in the following way: $InitializePopulation$,
+generates a uniform random locations within predefined function bounds. The exceptions are samples indexed: $D + 1$, $2D + 2$ and $\dfrac{D^2+ 3D}{2} + 2$, as they are the samples that are taken from linear, simple square
+and full square model optima (within function bounds).
 
+Within each iteration a subset of individuals is selected
+by $Select$--$IndividualsForModelApplication$, which randomizes which
+individuals are being sampled as model optima instead of SHADE algorithm\footnote{In a full version of GAPSO framework there can be an
+arbitrary number of algorithms, so this function is generalized
+to generate a sequence of algorithms to be applied for a given generation}.
+
+Subsequently an algorithm takes a function sample on the basis of model
+stationary point (in most cases a model function minimum within bounds)
+or on the basis of SHADE sampling (corresponding to the lines \ref{alg:shade:line:params-get} -- \ref{alg:shade:line:samples-get} and 
+line \ref{alg:shade:line:store-factor} in Algorithm~\ref{alg:shade}), denoted as $GetSampleAsModelFunctionStationaryPoint$ and $GetSampleAs$--$InSHADEAndStoreShadeFactors$, respectively.
 %
+There are three possibilities which may trigger the restart of the population (as applied in SHADE):
+\begin{enumerate}
+	\item There has been no improvement of the global best optimum estimation in a given number of function evaluations
+	\item All the values of the current population are within a given threshold:
+	
+	$\max\limits_{i=1,2,\ldots,pop.size}f(x_i) - \min\limits_{i=1,2,\ldots,pop.size}f(x_i) < \Theta_{values}$
+	\item The population has converged in at least one diminesion:
+\end{enumerate}
+$\exists_{d \in \lbrace 1,2,\ldots D \rbrace} \max\limits_{i=1,2,\ldots,pop.size}x[d]_i - \min\limits_{i=1,2,\ldots,pop.size}x[d]_i < \Theta_{locations}$
+
+
 \section{Experimental Procedure}
 
 We have run 2 configurations of our proposed approach,
@@ -466,7 +490,6 @@ and $f22$ function on $20D$,
 as the functions in $f21$ - $f24$
 weakly structured functions group do not have a general trend factor
 to be exploited by fitting a single model.
-
 
 For future work we plan to include within this hybrid also the CMA-ES
 optimizer which poses an additional challenge of adapting CMA-ES' covariance
