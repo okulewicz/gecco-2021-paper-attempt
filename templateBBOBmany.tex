@@ -453,15 +453,20 @@ unsuccessful trial under consideration.
 
 Proposed SHADE-LM and SHADE-LM-POP4-to-10 configurations,
 improved the overall performance of the original R-SHADE algorithm.
-Original R-SHADE was found to be definitely better only for $f21$
-and $f22$ function on $20D$.
-
+The improved results for $f1$ and $f5$ come directly from fitting the model,
+as those are spherical and linear functions.
 Additionally, we have observed that starting with a smaller population size
 of $4D$ improves the performance for low optimization budget,
 up to $10^3 \times D$. Setting population size to its final value
 of $10D$ proves beneficial in the long run for the optimization
 budgets higher than $10^4 \times D$, especially for dimensions $10$
 and $20$.
+The original R-SHADE was found to be definitely better only for $f21$
+and $f22$ function on $20D$,
+as the functions in $f21$ - $f24$
+weakly structured functions group do not have a general trend factor
+to be exploited by fitting a single model.
+
 
 For future work we plan to include within this hybrid also the CMA-ES
 optimizer which poses an additional challenge of adapting CMA-ES' covariance
